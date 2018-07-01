@@ -1,11 +1,4 @@
-%pareja(Persona, Persona)
-pareja(marsellus, mia).
-pareja(pumkin,    honeyBunny).
-
-%trabajaPara(Empleador, Empleado)
-trabajaPara(marsellus, vincent).
-trabajaPara(marsellus, jules).
-trabajaPara(marsellus, winston).
+%PARTE1
 
 %1
 saleCon(Quien,Cual):-
@@ -21,10 +14,17 @@ Caso Recursivo:	saleCon(Quien,Cual):-
 				saleCon(Cual,Quien). */
 
 %2
+%pareja(Persona, Persona)
 pareja(bernardo, bianca).
     pareja(bernardo, charo).
+pareja(marsellus, mia).
+pareja(pumkin,    honeyBunny).
 
 %3
+%trabajaPara(Empleador, Empleado)
+trabajaPara(marsellus, vincent).
+trabajaPara(marsellus, jules).
+trabajaPara(marsellus, winston).
 trabajaPara(Empleador,bernardo):-
 	trabajaPara(marsellus,Empleador),
 	Empleador\=jules.
@@ -41,7 +41,7 @@ esFiel(Persona):-
 acataOrden(Persona1, Persona2):-
 	trabajaPara(Persona1,Persona2).
 	    
-	   acataOrden(Persona1, Persona2):-
+acataOrden(Persona1, Persona2):-
 	trabajaPara(Persona1,Jefe),
 	acataOrden(Jefe, Persona2).
   
@@ -79,11 +79,11 @@ amigo(vincent, elVendedor).
 esPeligroso(Personaje):-
 		personaje(Personaje,mafioso(maton)).
 
-	esPeligroso(Personaje):-
+esPeligroso(Personaje):-
 		personaje(Personaje,ladron(Objetivos)),
 		member(licorerias,Objetivos).
 
-	esPeligroso(Personaje):-
+esPeligroso(Personaje):-
 		trabajaPara(Jefe,Personaje),
 		esPeligroso(Jefe).
 
@@ -93,7 +93,10 @@ esPeligroso(Personaje):-
   forall(tieneCerca(Persona,Alguien), encargo(Persona,Alguien,_)).
 
 tieneCerca(Alguien,Persona):-
-	amigos(Persona,Alguien).
+	amigo(Persona,Alguien).
+	
+tieneCerca(Alguien,Persona):-
+	amigo(Alguien,Persona).
 
 tieneCerca(Persona,Alguien):-
 	trabajaPara(Persona,Alguien).
