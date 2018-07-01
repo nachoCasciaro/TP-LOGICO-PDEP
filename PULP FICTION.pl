@@ -4,21 +4,14 @@
 saleCon(Quien,Cual):-
 	pareja(Quien,Cual).
 saleCon(Quien,Cual):-
-	saleCon(Cual,Quien).
-
-
-/*Caso Base: 	saleCon(Quien,Cual):-
-			pareja(Quien,Cual).	
-
-Caso Recursivo:	saleCon(Quien,Cual):-
-				saleCon(Cual,Quien). */
+	pareja(Cual,Quien).
 
 %2
 %pareja(Persona, Persona)
 pareja(bernardo, bianca).
-    pareja(bernardo, charo).
+pareja(bernardo, charo).
 pareja(marsellus, mia).
-pareja(pumkin,    honeyBunny).
+pareja(pumkin,  honeyBunny).
 
 %3
 %trabajaPara(Empleador, Empleado)
@@ -33,10 +26,16 @@ trabajaPara(Empleador, george):-
 
 %4
 esFiel(Persona):-
+    tienePareja(Persona),
 	not((saleCon(Persona,Amante1),
 	saleCon(Persona,Amante2),
 	Amante1\=Amante2)).
-  
+ 
+tienePareja(Alguien):-
+    pareja(Alguien, _).
+tienePareja(Alguien):-
+    pareja(_, Alguien).
+
 %5
 acataOrden(Persona1, Persona2):-
 	trabajaPara(Persona1,Persona2).
@@ -44,7 +43,9 @@ acataOrden(Persona1, Persona2):-
 acataOrden(Persona1, Persona2):-
 	trabajaPara(Persona1,Jefe),
 	acataOrden(Jefe, Persona2).
-  
+
+%PARTE 2  
+
   % personaje(Nombre, Ocupacion)
 personaje(pumkin,     ladron([estacionesDeServicio, licorerias])).
 personaje(honeyBunny, ladron([licorerias, estacionesDeServicio])).
@@ -129,15 +130,15 @@ asignarNivel(Ocupacion,0):-
 esPersonajeRespetable(Persona):-
 	nivelRespeto(Persona, Nivel),
 	Nivel>9.
-noEsPersonajeRespetable(Persona):-
-  nivelRespeto(Persona, Nivel),
-	Nivel=<9.
+respetabilidad(Respetables,NoRespetables):-	
+	findall(PersonajeRespetable,esPersonajeRespetable(PersonajeRespetable),ListaRespetables),
+	length(ListaRespetables,Respetables),
+	cantidadPersonajes(Cantidad),
+	NoRespetables is Cantidad - Respetables.
 
-respetabilidad(Respetables,NoRespetables):-
-  findall(Personaje,esPersonajeRespetable(Personaje),ListaRespetables),
-  length(ListaRespetables,Respetables),
-  findall(Personaje,noEsPersonajeRespetable(Personaje),ListaNoRespetables),
-  length(ListaNoRespetables,NoRespetables).
+cantidadPersonajes(Cantidad):-
+	findall(Personaje,personaje(Personaje,_),ListaPersonajes),
+	length(ListaPersonajes,Cantidad).
 
 %5
 masAtareado(Personaje):-
@@ -152,5 +153,3 @@ esElMasAtareado(Personaje,Persona):-
 cantidadEncargos(Personaje,Cantidad):-
   findall(Encargo,encargo(_,Personaje,_),Encargos),
   length(Encargos,Cantidad).	
-
-
